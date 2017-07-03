@@ -1,0 +1,77 @@
+<head>
+    <title>Outline test</title>
+    <script>
+outline = {
+    "_": "level one",
+    "items": [
+        {"_":"level two"},
+        {"_":"level two.sub",
+        "items":[
+            {"_":"level three"},
+            {"_":"level three"},
+        ]},
+        {"_":"level two.2j"}
+    ]}
+
+var doubleLink = function(data){
+    if(data.items)
+    for(i of data.items){
+        i.parent=data;
+        doubleLink(i);
+    }
+}
+
+doubleLink(outline)
+
+var render = function(data){
+    renderTree(document.getElementById("main"), data)
+    renderBreadcrumb(document.getElementById("breadcrumb"), data)
+}
+
+var renderTree = function(node, data) {
+    node.textContent = data["_"]
+    node.onclick = function(){render(data)}
+
+    if(data.items)
+    for(i of data.items){
+        var childNode = document.createElement("div");
+        node.appendChild(childNode)
+        renderTree(childNode, i);
+    }
+}
+
+var renderBreadcrumb = function(node, data){
+
+    while(node.firstChild) node.removeChild(node.firstChild)
+
+    while(data.parent) {
+        data = data.parent
+
+        var childNode = document.createElement('a')
+        childNode.textContent = data['_']
+        childNode.onclick = (function(i,f){
+            return function(){f(i)}
+        })(data, render)
+
+        node.insertBefore(document.createTextNode('>'), node.firstChild)
+        node.insertBefore(childNode, node.firstChild)
+
+    }
+
+
+
+}
+
+
+</script>
+<style>
+div {margin-left: 1em}
+</style>
+
+</head>
+<body>
+    <div id=breadcrumb></div>
+    <div id=main></div>
+    <script>render(outline)</script>
+</body>
+

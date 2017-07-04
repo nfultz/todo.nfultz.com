@@ -107,6 +107,28 @@ var swapdown = function(data){
 
 }
 
+insertup = function(data) {
+
+  var a = data.parent.items
+  var i = a.indexOf(data)
+
+  data.selected = false
+
+  toAdd = {"_":"", "selected":true, "parent":data.parent}
+  a.splice(i,0,toAdd)
+
+}
+
+insertdown = function(data) {
+
+  data.selected = false
+  toAdd = {"_":"", "selected":true, "parent":data}
+
+  if(!data.items) data.items = []
+  data.items.unshift(toAdd)
+}
+ 
+
 var setSelected = function(idx, delta) {
     var leaves = document.getElementsByClassName("leaf")
     var selected = 0
@@ -211,7 +233,10 @@ var renderBreadcrumb = function(node, data){
 
 
 function keys(key) {
+
+    if(document.activeElement.name == 'filter') return;
     console.log(key)
+
     var selected = document.getElementById('selected')
     if(selected.getAttribute('contentEditable') == 'true' && key.which != 27) return false;
 
@@ -273,6 +298,20 @@ function keys(key) {
                 }
                prevSelected()
 			   break;
+            case 191: //slash
+                document.getElementsByName('filter')[0].focus()
+                break;
+            case 79: // o new item above / below
+                if(key.shiftKey) {
+                    insertup(selected.data);
+                    render(current)
+                    document.getElementById('selected').click()
+                    break;
+                }
+                insertdown(selected.data);
+                render(current)
+                document.getElementById('selected').click()
+                break
 		}
    }
 	return false;

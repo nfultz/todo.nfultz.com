@@ -41,7 +41,12 @@ var renderTree = function(node, data) {
     //drilldown
     var popNode = document.createElement('a');
     popNode.textContent = data["_"]
-    popNode.onclick = function(){render(data)}
+    popNode.ondblclick = function(){render(data)}
+    popNode.onclick = function(){popNode.setAttribute('contentEditable', 'true')}
+    popNode.onblur = function(){
+        popNode.setAttribute('contentEditable', 'false')
+        data['_'] = popNode.textContent
+    }
     node.appendChild(popNode);
 
     if(!data.items) return;

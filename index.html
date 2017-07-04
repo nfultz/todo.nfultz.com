@@ -39,6 +39,7 @@ var render = function(data){
 }
 
 var deleteItem = function (data) {
+  if(!data.parent) return;
   var a = data.parent.items
   var i = a.indexOf(data)
   data.parent.items = a.slice(0, i).concat(data.items || []).concat(a.slice(i+1))
@@ -225,7 +226,7 @@ var renderTree = function(node, data, filtertxt) {
     popNode.onblur = function(){
         popNode.setAttribute('contentEditable', 'false')
         var txt = popNode.textContent
-        if(data.parent && !txt) {
+        if(!txt) {
             deleteItem(data)
             render(current)
         } else data['_'] = txt
@@ -367,12 +368,16 @@ function keys(key) {
                 render(current)
                 document.getElementById('selected').click()
                 break
-            case 83:
+            case 83: // s
                 nextStatus(selected.data);
                 render(current)
                 break;
-            case 90:
+            case 90: // z
                 selected.data.collapsed =!selected.data.collapsed;
+                render(current)
+                break;
+            case 68: // d delete
+                deleteItem(selected.data)
                 render(current)
                 break;
                 

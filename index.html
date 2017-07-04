@@ -5,9 +5,9 @@ outline = {
     "_": "level one",
     "items": [
         {"_":"level two"},
-        {"_":"level two.sub",
+        {"_":"level two.sub @bob @sue #ftw",
         "items":[
-            {"_":"level three"},
+            {"_":"level three #ftw"},
             {"_":"level three"},
         ]},
         {"_":"level two.2j"}
@@ -160,6 +160,37 @@ var setSelected2 = function(newNode) {
     if(newNode.data) newNode.data.selected = true
 }
 
+var renderLeaf = function(node, txt){
+    var chunks = txt.match(/[#@]\w+|[^#@]*/g)
+
+    for(chunk of chunks){
+        var txtNode = document.createTextNode(chunk)
+        var childNode = document.createElement('a')
+        switch(chunk[0]) {
+                case '#':
+                case '@':
+                childNode.setAttribute('class', {'#':'hashtag', '@':'attag'}[chunk[0]])
+                childNode.setAttribute('href', '#')
+                childNode.appendChild(txtNode)
+                childNode.onclick = (function(i){
+                    return function(e){
+                        console.log(i)
+                        e.stopPropagation()
+                        document.getElementsByName("filter")[0].value = i
+                        render(current)
+                    }
+                })(chunk)
+                break;
+                default:
+                  childNode = txtNode
+        }
+        node.append(childNode)
+
+
+    }
+
+}
+
 var renderTree = function(node, data, filtertxt) {
     eraseChildren(node);
     console.log([filtertxt, data["_"]])
@@ -169,7 +200,7 @@ var renderTree = function(node, data, filtertxt) {
     //drilldown
     var popNode = document.createElement('span');
     popNode.setAttribute("class", "leaf")
-    popNode.innerHTML = data["_"]
+    renderLeaf(popNode, data["_"])
     if(data.selected) 
         popNode.setAttribute("id", "selected")
     popNode.data = data
@@ -339,6 +370,8 @@ window.onload = function(){
 div {margin-left: 1em}
 span[contentEditable="true"] {background: #CCC}
 #selected.leaf {border: 1px dotted}
+.attag { color: green }
+.hashtag { color: blue }
 </style>
 
 </head>

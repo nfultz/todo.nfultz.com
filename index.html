@@ -3,17 +3,6 @@
 <title>Outline test</title>
 <meta charset="UTF-8"/>
 <script>
-outline = {
-    "_": "level one",
-    "items": [
-        {"_":"level two"},
-        {"_":"level two.sub @bob @sue #ftw",
-        "items":[
-            {"_":"level three #ftw"},
-            {"_":"level three"},
-        ]},
-        {"_":"level two.2j"}
-    ]}
 
 var doubleLink = function(data){
     if(data.items)
@@ -27,7 +16,6 @@ var eraseChildren = function(node){
     while(node.firstChild) node.removeChild(node.firstChild)
 }
 
-doubleLink(outline)
 
 current = 0
 
@@ -156,13 +144,10 @@ var prevSelected = function(){
 var nextStatus = function(data){
     statuses = "+-✔"
 
-    i = (statuses.indexOf(data.status || '') + 1 + statuses.length) % statuses.length
-    data.status = statuses[i]
-
-
-
-
+    i = statuses.indexOf(data.status || '') + 1 + statuses.length
+    data.status = statuses[i % statuses.length]
 }
+
 var setSelected2 = function(newNode) {
     var old = document.getElementById("selected")
     if(old) {
@@ -213,7 +198,7 @@ var renderTree = function(node, data, filtertxt) {
     var popNode = document.createElement('span');
     popNode.setAttribute("class", "leaf")
     renderLeaf(popNode, data["_"])
-    if(data.selected) 
+    if(data.selected)
         popNode.setAttribute("id", "selected")
     popNode.data = data
 
@@ -387,9 +372,19 @@ function keys(key) {
 }
 
 window.onload = function(){
-  document.onkeyup = keys
-  render(outline)
-  setSelected(0,0)
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+                       // Typical action to be performed when the document is ready:
+                outline = JSON.parse(xhttp.responseText)
+                doubleLink(outline)
+                document.onkeyup = keys
+                render(outline)
+                setSelected(0,0)
+        }
+    };
+    xhttp.open("GET", "outline.json", true);
+    xhttp.send();
 }
 </script>
 

@@ -1,0 +1,11 @@
+{
+    "_": "level one",
+    "items": [
+        {"_":"level two"},
+        {"_":"level two.sub @bob @sue #ftw",
+        "items":[
+            {"_":"level three #ftw"},
+            {"_":"level three"}
+        ]},
+        {"_":"level two.2j"}
+    ]}

@@ -1,5 +1,7 @@
+<html>
 <head>
 <title>Outline test</title>
+<meta charset="UTF-8"/>
 <script>
 outline = {
     "_": "level one",
@@ -150,7 +152,7 @@ var prevSelected = function(){
 }
 
 var nextStatus = function(data){
-    statuses = "☐☑+"
+    statuses = "+-✔"
 
     i = (statuses.indexOf(data.status || '') + 1 + statuses.length) % statuses.length
     data.status = statuses[i]
@@ -365,9 +367,7 @@ function keys(key) {
                 document.getElementById('selected').click()
                 break
             case 83:
-                console.log(selected.data)
                 nextStatus(selected.data);
-                console.log({"modified":selected.data})
                 render(current)
 		}
    }

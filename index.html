@@ -290,8 +290,8 @@ function keys(key) {
                 selected.ondblclick()
                 break;
             case 27: //escape
-                if(document.activeElement.name =='filter') {
-                    document.activeElement.value = ''
+                if(document.activeElement.getAttribute('contentEditable') !='true') {
+                    document.getElementsByName('filter')[0].value = ''
                 }
                 document.activeElement.blur()
                 render(current)

@@ -420,7 +420,7 @@ var download = function() {
           var out = { "_":obj["_"] }
           if(obj.status) out.status = obj.status
           if(obj.collapsed) out.collapsed = obj.collapsed
-          if(obj.items) out.items = obj.items.map(tidy)
+          if(obj.items && obj.items.length > 0) out.items = obj.items.map(tidy)
           return out;
       }
 

@@ -83,6 +83,30 @@ var dedent = function(data) {
 
 }
 
+var swapup = function(data){
+
+  var a = data.parent.items
+  var i = a.indexOf(data)
+
+  if(i == 0) return;
+
+  a[i] = a[i-1]
+  a[i-1] = data
+
+}
+
+var swapdown = function(data){
+
+  var a = data.parent.items
+  var i = a.indexOf(data)
+
+  if(i == a.length -1) return;
+    
+  a[i] = a[i+1]
+  a[i+1] = data
+
+}
+
 var setSelected = function(idx, delta) {
     var leaves = document.getElementsByClassName("leaf")
     var selected = 0
@@ -221,6 +245,11 @@ function keys(key) {
                 }
             case 74: //j
 			case 40: // downkey
+                if(key.shiftKey) {
+                    swapdown(selected.data);
+                    render(current)
+                    break;
+                }
                 nextSelected()
 				break;
 			case 37: // leftkey
@@ -237,6 +266,11 @@ function keys(key) {
                 }
             case 75://k
 			case 38: // upkey
+                if(key.shiftKey) {
+                    swapup(selected.data);
+                    render(current)
+                    break;
+                }
                prevSelected()
 			   break;
 		}

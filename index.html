@@ -41,11 +41,26 @@ var deleteItem = function (data) {
   data.parent.items = a.slice(0, i).concat(data.items || []).concat(a.slice(i+1))
 }
 
+var indent = function(data){
+  var a = data.parent.items
+  var i = a.indexOf(data)
+
+  if(i <= 0) return;
+  a.splice(i,1)
+  if(!a[i-1].items)
+        a[i-1].items = []
+
+  a[i-1].items.push(data)
+
+}
+
+var dedent = function(data) {
+
+}
+
 var setSelected = function(idx, delta) {
     var leaves = document.getElementsByClassName("leaf")
     var selected = 0
-    //console.log("" + idx + " " + delta)
-    //console.log(leaves)
 
     if(leaves.selected) {
         while(leaves.selected != leaves[selected]) selected++;
@@ -88,6 +103,7 @@ var renderTree = function(node, data) {
     popNode.onclick = function(){
         setSelected2(popNode)
         popNode.setAttribute('contentEditable', 'true')
+        popNode.focus()
     }
     popNode.onblur = function(){
         popNode.setAttribute('contentEditable', 'false')
@@ -146,27 +162,25 @@ var renderBreadcrumb = function(node, data){
 
 
 function keys(key) {
+    console.log(key)
     var selected = document.getElementById('selected')
-    if(selected.getAttribute('contentEditable') == 'true') return false;
+    if(selected.getAttribute('contentEditable') == 'true' && key.which != 27) return false;
 
 	if (true) {
 		switch (key.which) {
+            case  9: // tab
+                indent(selected.data)
+                render(current)
+                break
 			case 10: // return
 			case 13: // enter
-                var event = new MouseEvent('dblclick', {
-                        'view': window,
-                        'bubbles': true,
-                        'cancelable': true
-                      });
-                document.getElementById('selected').dispatchEvent(event);
+                selected.ondblclick()
+                break;
+            case 27: //escape
+                document.activeElement.blur()
                 break;
 			case 32: // spacebar
-                var event = new MouseEvent('click', {
-                        'view': window,
-                        'bubbles': true,
-                        'cancelable': true
-                      });
-                document.getElementById('selected').dispatchEvent(event);
+                selected.onclick()
                 break;
 			case 34: // page down
 			case 39: // rightkey
@@ -186,20 +200,8 @@ function keys(key) {
                     break
                 }
 			case 38: // upkey
-                prevSelected()
+               prevSelected()
 			   break;
-			case 36: // home
-				goTo(0);
-				break;
-			case 35: // end
-				goTo(smax-1);
-				break;
-			case 67: // c
-				showHide('k');
-				break;
-			case 78: // n
-				createNotesWindow();
-				break;
 		}
    }
 	return false;

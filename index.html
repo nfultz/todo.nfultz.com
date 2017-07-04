@@ -35,6 +35,14 @@ var render = function(data){
     renderBreadcrumb(document.getElementById("breadcrumb"), data)
 }
 
+var deleteItem = function (data) {
+  var a = data.parent.items
+  var i = a.indexOf(data)
+
+  data.parent.items = a.slice(0, i).concat(data.items || []).concat(a.slice(i+1))
+
+}
+
 var renderTree = function(node, data) {
     eraseChildren(node);
 
@@ -45,7 +53,11 @@ var renderTree = function(node, data) {
     popNode.onclick = function(){popNode.setAttribute('contentEditable', 'true')}
     popNode.onblur = function(){
         popNode.setAttribute('contentEditable', 'false')
-        data['_'] = popNode.textContent
+        var txt = popNode.textContent
+        if(data.parent && !txt) {
+            deleteItem(data)
+            render(current)
+        } else data['_'] = txt
     }
     node.appendChild(popNode);
 

@@ -33,22 +33,43 @@ var render = function(data){
     current = data;
     renderTree(document.getElementById("main"), data)
     renderBreadcrumb(document.getElementById("breadcrumb"), data)
+    setSelected(0,0)
 }
 
 var deleteItem = function (data) {
   var a = data.parent.items
   var i = a.indexOf(data)
-
   data.parent.items = a.slice(0, i).concat(data.items || []).concat(a.slice(i+1))
 
+}
+
+var setSelected = function(idx, delta) {
+    var leaves = document.getElementsByClassName("leaf")
+    var selected = 0
+    if(leaves.selected) {
+        while(leaves.selected != leaves[selected]) selected++;
+        leaves.selected.setAttribute('id', null)
+    }
+    selected = (delta ? selected + delta : idx) % leaves.length
+    leaves[selected].setAttribute('id', 'selected')
+}
+
+var nextSelected = function(){
+    setSelected(0, 1)
+}
+
+var prevSelected = function(){
+    setSelected(0, -1)
 }
 
 var renderTree = function(node, data) {
     eraseChildren(node);
 
     //drilldown
-    var popNode = document.createElement('a');
-    popNode.textContent = data["_"]
+    var popNode = document.createElement('span');
+    popNode.setAttribute("class", "leaf")
+    popNode.innerHTML = data["_"]
+
     popNode.ondblclick = function(){render(data)}
     popNode.onclick = function(){popNode.setAttribute('contentEditable', 'true')}
     popNode.onblur = function(){
@@ -110,11 +131,16 @@ var renderBreadcrumb = function(node, data){
 <style>
 div {margin-left: 1em}
 a[contentEditable="true"] {background: #CCC}
+#selected.leaf {border: 1px dotted}
 </style>
 
 </head>
 <body>
+    <header>Neal's work</header>
+    <input name=filter></input>
+    <hr/>
     <div id=breadcrumb></div>
+    <hr/>
     <div id=main></div>
     <script>render(outline)</script>
 </body>

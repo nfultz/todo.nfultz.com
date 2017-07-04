@@ -357,6 +357,9 @@ function keys(key) {
                 nextStatus(selected.data);
                 render(current)
                 break;
+            case 87 : // w for write
+                download();
+                break;
             case 90: // z
                 selected.data.collapsed =!selected.data.collapsed;
                 render(current)
@@ -385,6 +388,29 @@ window.onload = function(){
     };
     xhttp.open("GET", "outline.json", true);
     xhttp.send();
+}
+
+//from https://stackoverflow.com/a/18197341/986793
+var download = function() {
+      var tidy = function(obj){
+          var out = { "_":obj["_"] }
+          if(obj.status) out.status = obj.status
+          if(obj.collapsed) out.collapsed = obj.collapsed
+          if(obj.items) out.items = obj.items.map(tidy)
+          return out;
+      }
+
+      var text = JSON.stringify(tidy(outline))
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', 'outline.json');
+
+      element.style.display = 'none';
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
 }
 </script>
 

@@ -33,28 +33,25 @@ var render = function(data){
     current = data;
     renderTree(document.getElementById("main"), data)
     renderBreadcrumb(document.getElementById("breadcrumb"), data)
-    setSelected(0,0)
 }
 
 var deleteItem = function (data) {
   var a = data.parent.items
   var i = a.indexOf(data)
   data.parent.items = a.slice(0, i).concat(data.items || []).concat(a.slice(i+1))
-
 }
 
 var setSelected = function(idx, delta) {
     var leaves = document.getElementsByClassName("leaf")
     var selected = 0
-    console.log("" + idx + " " + delta)
-    console.log(leaves)
+    //console.log("" + idx + " " + delta)
+    //console.log(leaves)
 
     if(leaves.selected) {
         while(leaves.selected != leaves[selected]) selected++;
-        leaves.selected.setAttribute('id', null)
     }
     selected = ((delta ? selected + delta : idx) + leaves.length) % leaves.length
-    leaves[selected].setAttribute('id', 'selected')
+    setSelected2(leaves[selected])
 }
 
 var nextSelected = function(){
@@ -65,6 +62,17 @@ var prevSelected = function(){
     setSelected(0, -1)
 }
 
+var setSelected2 = function(newNode) {
+    var old = document.getElementById("selected")
+    if(old) {
+        old.setAttribute('id', null)
+      if(old.data) old.data.selected = false
+    }
+
+    newNode.setAttribute("id", "selected")
+    if(newNode.data) newNode.data.selected = true
+}
+
 var renderTree = function(node, data) {
     eraseChildren(node);
 
@@ -72,9 +80,15 @@ var renderTree = function(node, data) {
     var popNode = document.createElement('span');
     popNode.setAttribute("class", "leaf")
     popNode.innerHTML = data["_"]
+    if(data.selected) 
+        popNode.setAttribute("id", "selected")
+    popNode.data = data
 
     popNode.ondblclick = function(){render(data)}
-    popNode.onclick = function(){popNode.setAttribute('contentEditable', 'true')}
+    popNode.onclick = function(){
+        setSelected2(popNode)
+        popNode.setAttribute('contentEditable', 'true')
+    }
     popNode.onblur = function(){
         popNode.setAttribute('contentEditable', 'false')
         var txt = popNode.textContent
@@ -91,6 +105,7 @@ var renderTree = function(node, data) {
     var collapseNode = document.createElement('a');
     collapseNode.textContent = data.collapsed ? "+" : "-"
     collapseNode.onclick = function() {
+            setSelected2(popNode)
             data.collapsed = !data.collapsed;
             render(current)
         }
@@ -131,19 +146,9 @@ var renderBreadcrumb = function(node, data){
 
 
 function keys(key) {
-    var current = document.getElementById('selected')
-    if(current.getAttribute('contentEditable') == 'true') return;
+    var selected = document.getElementById('selected')
+    if(selected.getAttribute('contentEditable') == 'true') return false;
 
-    console.log(key)
-	if (!key) {
-        console.log(key)
-		key = event;
-		key.which = key.keyCode;
-	}
-	if (key.which == 84) {
-		toggle();
-		return;
-	}
 	if (true) {
 		switch (key.which) {
 			case 10: // return
@@ -165,11 +170,21 @@ function keys(key) {
                 break;
 			case 34: // page down
 			case 39: // rightkey
+                if(selected.data.collapsed) {
+                    selected.data.collapsed = false;
+                    render(current)
+                    break
+                }
 			case 40: // downkey
                 nextSelected()
 				break;
 			case 33: // page up
 			case 37: // leftkey
+                if(selected.data.items && !selected.data.collapsed) {
+                    selected.data.collapsed = true;
+                    render(current)
+                    break
+                }
 			case 38: // upkey
                 prevSelected()
 			   break;
@@ -193,6 +208,7 @@ function keys(key) {
 window.onload = function(){
   document.onkeyup = keys
   render(outline)
+  setSelected(0,0)
 }
 </script>
 <style>

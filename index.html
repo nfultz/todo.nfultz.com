@@ -46,11 +46,14 @@ var deleteItem = function (data) {
 var setSelected = function(idx, delta) {
     var leaves = document.getElementsByClassName("leaf")
     var selected = 0
+    console.log("" + idx + " " + delta)
+    console.log(leaves)
+
     if(leaves.selected) {
         while(leaves.selected != leaves[selected]) selected++;
         leaves.selected.setAttribute('id', null)
     }
-    selected = (delta ? selected + delta : idx) % leaves.length
+    selected = ((delta ? selected + delta : idx) + leaves.length) % leaves.length
     leaves[selected].setAttribute('id', 'selected')
 }
 
@@ -128,6 +131,9 @@ var renderBreadcrumb = function(node, data){
 
 
 function keys(key) {
+    var current = document.getElementById('selected')
+    if(current.getAttribute('contentEditable') == 'true') return;
+
     console.log(key)
 	if (!key) {
         console.log(key)
@@ -142,7 +148,21 @@ function keys(key) {
 		switch (key.which) {
 			case 10: // return
 			case 13: // enter
+                var event = new MouseEvent('dblclick', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true
+                      });
+                document.getElementById('selected').dispatchEvent(event);
+                break;
 			case 32: // spacebar
+                var event = new MouseEvent('click', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true
+                      });
+                document.getElementById('selected').dispatchEvent(event);
+                break;
 			case 34: // page down
 			case 39: // rightkey
 			case 40: // downkey
@@ -177,7 +197,7 @@ window.onload = function(){
 </script>
 <style>
 div {margin-left: 1em}
-a[contentEditable="true"] {background: #CCC}
+span[contentEditable="true"] {background: #CCC}
 #selected.leaf {border: 1px dotted}
 </style>
 

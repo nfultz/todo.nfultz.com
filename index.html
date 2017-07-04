@@ -112,6 +112,16 @@ insertup = function(data, txt) {
 
 }
 
+insertnext = function(data, txt, j) {
+
+  var a = data.parent.items
+  var i = a.indexOf(data)
+
+  toAdd = {"_":txt, "parent":data.parent}
+  a.splice(i+j,0,toAdd)
+
+}
+
 insertdown = function(data, txt) {
 
   data.selected = false
@@ -215,11 +225,20 @@ var renderTree = function(node, data, filtertxt) {
     }
     popNode.onblur = function(){
         popNode.setAttribute('contentEditable', 'false')
-        var txt = popNode.textContent
+        var txt = popNode.innerText
         if(!txt) {
             deleteItem(data)
             render(current)
-        } else data['_'] = txt
+        } else{
+            console.log(txt)
+            txt = txt.split('\n')
+            console.log(txt)
+            data['_'] = txt.shift()
+            var i = 1;
+            for(el of txt){
+              insertnext(data, el, i++)
+            }
+        }
     }
     if(toDraw) node.appendChild(popNode);
 

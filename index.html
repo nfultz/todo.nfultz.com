@@ -174,7 +174,6 @@ var renderLeaf = function(node, txt){
                 childNode.appendChild(txtNode)
                 childNode.onclick = (function(i){
                     return function(e){
-                        console.log(i)
                         e.stopPropagation()
                         document.getElementsByName("filter")[0].value = i
                         render(current)
@@ -193,7 +192,6 @@ var renderLeaf = function(node, txt){
 
 var renderTree = function(node, data, filtertxt) {
     eraseChildren(node);
-    console.log([filtertxt, data["_"]])
     toDraw = !filtertxt || data["_"].search(filtertxt) >= 0
     if(!toDraw) data.selected = false
 
@@ -276,7 +274,6 @@ function keys(key) {
         if(select == null && document.getElementsByClassName("leaf").length > 0) setSelected(0,0)
         return;
     }
-    console.log(key)
 
     if(selected && selected.getAttribute('contentEditable') == 'true' && key.which != 27) return false;
 

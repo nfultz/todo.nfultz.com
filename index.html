@@ -22,8 +22,9 @@ current = 0
 
 var render = function(data){
     current = data;
-    filtertxt = document.getElementsByName("filter")[0].value
-    renderTree(document.getElementById("main"), data, filtertxt)
+    var filtertxt = document.getElementsByName("filter")[0].value
+    var editable = document.getElementsByName('editable')[0].checked
+    renderTree(document.getElementById("main"), data, filtertxt, editable)
     renderBreadcrumb(document.getElementById("breadcrumb"), data)
 }
 
@@ -208,7 +209,7 @@ var renderLeaf = function(node, txt){
 
 }
 
-var renderTree = function(node, data, filtertxt) {
+var renderTree = function(node, data, filtertxt, editable) {
     eraseChildren(node);
     toDraw = !filtertxt || data["_"].search(filtertxt) >= 0
     if(!toDraw) data.selected = false
@@ -225,7 +226,7 @@ var renderTree = function(node, data, filtertxt) {
         data.collapsed = false
         render(data)
     }
-    popNode.onclick = function(){
+    popNode.onclick = !editable ? popNode.ondblclick : function(){
         if(!data.selected) {
             setSelected2(popNode)
         } else {
@@ -233,6 +234,8 @@ var renderTree = function(node, data, filtertxt) {
             popNode.focus()
         }
     }
+
+    if(editable)
     popNode.onblur = function(){
         popNode.setAttribute('contentEditable', 'false')
         var txt = popNode.innerText
@@ -270,7 +273,7 @@ var renderTree = function(node, data, filtertxt) {
     for(i of data.items){
         var childNode = document.createElement("div");
         node.appendChild(childNode)
-        renderTree(childNode, i, filtertxt);
+        renderTree(childNode, i, filtertxt, editable);
     }
 }
 
@@ -420,6 +423,7 @@ window.onload = function(){
     };
     xhttp.open("GET", "outline.json", true);
     xhttp.send();
+    document.getElementsByName('editable')[0].onclick = function(){render(current)}
 }
 
 //from https://stackoverflow.com/a/18197341/986793
@@ -474,6 +478,8 @@ div#main > div > div >span.leaf {font-size: 125%}
     <div class=filter><input name=filter></input></div>
     <hr/>
     <div id=main></div>
+    <hr/>
+    <input type=checkbox name=editable>edit mode</input>
 </div>
 </body>
 

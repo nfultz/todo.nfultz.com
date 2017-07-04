@@ -51,10 +51,35 @@ var indent = function(data){
         a[i-1].items = []
 
   a[i-1].items.push(data)
+  data.parent = a[i-1]
 
 }
 
 var dedent = function(data) {
+
+  var a = data.parent.items
+  var i = a.indexOf(data)
+
+  if(i < 0) return;
+  
+  if(!data.items)
+        data.items = []
+  data.items = data.items.concat(a.splice(i+1, 999))
+  if(data.items.length == 0)
+        delete data.items
+  a.pop()
+
+  if(a.length ==0)
+    delete data.parent.items
+
+  var b = data.parent.parent.items
+  var j = b.indexOf(data.parent)
+
+  b.splice(j+1,0,data)
+  data.parent = data.parent.parent
+  doubleLink(data)
+
+
 
 }
 
@@ -168,10 +193,6 @@ function keys(key) {
 
 	if (true) {
 		switch (key.which) {
-            case  9: // tab
-                indent(selected.data)
-                render(current)
-                break
 			case 10: // return
 			case 13: // enter
                 selected.ondblclick()
@@ -184,24 +205,36 @@ function keys(key) {
                 break;
 			case 34: // page down
 			case 39: // rightkey
+            case 76:
                 if(selected.data.collapsed) {
                     selected.data.collapsed = false;
                     render(current)
                     break
                 }
+            case 74:
 			case 40: // downkey
                 nextSelected()
 				break;
 			case 33: // page up
 			case 37: // leftkey
+            case 72:
                 if(selected.data.items && !selected.data.collapsed) {
                     selected.data.collapsed = true;
                     render(current)
                     break
                 }
+            case 75:
 			case 38: // upkey
                prevSelected()
 			   break;
+            case 73:
+                    indent(selected.data);
+                    render(current)
+                    break;
+            case 79:
+                    dedent(selected.data);
+                    render(current)
+                    break;
 		}
    }
 	return false;

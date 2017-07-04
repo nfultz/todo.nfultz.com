@@ -21,18 +21,44 @@ var doubleLink = function(data){
     }
 }
 
+var eraseChildren = function(node){
+    while(node.firstChild) node.removeChild(node.firstChild)
+}
+
 doubleLink(outline)
 
+current = 0
+
 var render = function(data){
+    current = data;
     renderTree(document.getElementById("main"), data)
     renderBreadcrumb(document.getElementById("breadcrumb"), data)
 }
 
 var renderTree = function(node, data) {
-    node.textContent = data["_"]
-    node.onclick = function(){render(data)}
+    eraseChildren(node);
 
-    if(data.items)
+    //drilldown
+    var popNode = document.createElement('a');
+    popNode.textContent = data["_"]
+    popNode.onclick = function(){render(data)}
+    node.appendChild(popNode);
+
+    if(!data.items) return;
+
+    //collapseToggle
+    var collapseNode = document.createElement('a');
+    collapseNode.textContent = data.collapsed ? "+" : "-"
+    collapseNode.onclick = function() {
+            data.collapsed = !data.collapsed;
+            render(current)
+        }
+    node.insertBefore(collapseNode, node.firstChild)
+
+    if(data.collapsed) {
+        return
+    }
+
     for(i of data.items){
         var childNode = document.createElement("div");
         node.appendChild(childNode)
@@ -42,7 +68,7 @@ var renderTree = function(node, data) {
 
 var renderBreadcrumb = function(node, data){
 
-    while(node.firstChild) node.removeChild(node.firstChild)
+    eraseChildren(node)
 
     while(data.parent) {
         data = data.parent
@@ -50,8 +76,8 @@ var renderBreadcrumb = function(node, data){
         var childNode = document.createElement('a')
         childNode.textContent = data['_']
         childNode.onclick = (function(i,f){
-            return function(){f(i)}
-        })(data, render)
+            return function(){render(i)}
+        })(data)
 
         node.insertBefore(document.createTextNode('>'), node.firstChild)
         node.insertBefore(childNode, node.firstChild)

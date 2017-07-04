@@ -31,7 +31,8 @@ current = 0
 
 var render = function(data){
     current = data;
-    renderTree(document.getElementById("main"), data)
+    filtertxt = document.getElementsByName("filter")[0].value
+    renderTree(document.getElementById("main"), data, filtertxt)
     renderBreadcrumb(document.getElementById("breadcrumb"), data)
 }
 
@@ -159,8 +160,11 @@ var setSelected2 = function(newNode) {
     if(newNode.data) newNode.data.selected = true
 }
 
-var renderTree = function(node, data) {
+var renderTree = function(node, data, filtertxt) {
     eraseChildren(node);
+    console.log([filtertxt, data["_"]])
+    toDraw = !filtertxt || data["_"].search(filtertxt) >= 0
+    if(!toDraw) data.selected = false
 
     //drilldown
     var popNode = document.createElement('span');
@@ -184,7 +188,7 @@ var renderTree = function(node, data) {
             render(current)
         } else data['_'] = txt
     }
-    node.appendChild(popNode);
+    if(toDraw) node.appendChild(popNode);
 
     if(!data.items) return;
 
@@ -196,16 +200,16 @@ var renderTree = function(node, data) {
             data.collapsed = !data.collapsed;
             render(current)
         }
-    node.insertBefore(collapseNode, node.firstChild)
+    if(toDraw) node.insertBefore(collapseNode, node.firstChild)
 
-    if(data.collapsed) {
+    if(data.collapsed && toDraw) {
         return
     }
 
     for(i of data.items){
         var childNode = document.createElement("div");
         node.appendChild(childNode)
-        renderTree(childNode, i);
+        renderTree(childNode, i, filtertxt);
     }
 }
 
@@ -234,11 +238,15 @@ var renderBreadcrumb = function(node, data){
 
 function keys(key) {
 
-    if(document.activeElement.name == 'filter') return;
+    if(document.activeElement.name == 'filter' && key.which != 27){
+        render(current)
+        if(document.getElementById('selected') == null && document.getElementsByClassName("leaf").length > 0) setSelected(0,0)
+        return;
+    }
     console.log(key)
 
     var selected = document.getElementById('selected')
-    if(selected.getAttribute('contentEditable') == 'true' && key.which != 27) return false;
+    if(selected && selected.getAttribute('contentEditable') == 'true' && key.which != 27) return false;
 
 	if (true) {
 		switch (key.which) {
@@ -251,7 +259,11 @@ function keys(key) {
                 selected.ondblclick()
                 break;
             case 27: //escape
+                if(document.activeElement.name =='filter') {
+                    document.activeElement.value = ''
+                }
                 document.activeElement.blur()
+                render(current)
                 break;
 			case 32: // spacebar
                 selected.onclick()

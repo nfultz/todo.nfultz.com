@@ -60,6 +60,7 @@ var indent = function(data){
 
 var dedent = function(data) {
 
+  if(!data.parent || !data.parent.parent) return;
   var a = data.parent.items
   var i = a.indexOf(data)
 
@@ -268,7 +269,7 @@ var renderBreadcrumb = function(node, data){
             return function(){render(i)}
         })(data)
 
-        node.insertBefore(document.createTextNode('>'), node.firstChild)
+        node.insertBefore(document.createTextNode(' > '), node.firstChild)
         node.insertBefore(childNode, node.firstChild)
 
     }
@@ -312,15 +313,15 @@ function keys(key) {
                 break;
 			case 39: // rightkey
             case 76: //l
-                if(selected.data.collapsed) {
-                    selected.data.collapsed = false;
-                    render(current)
-                    break
-                }
                 if(key.shiftKey){
                     indent(selected.data);
                     render(current)
                     break;
+                }
+                if(selected.data.collapsed) {
+                    selected.data.collapsed = false;
+                    render(current)
+                    break
                 }
             case 74: //j
 			case 40: // downkey
@@ -333,15 +334,15 @@ function keys(key) {
 				break;
 			case 37: // leftkey
             case 72: // h
-                if(selected.data.items && !selected.data.collapsed) {
-                    selected.data.collapsed = true;
-                    render(current)
-                    break
-                }
                 if(key.shiftKey) {
                     dedent(selected.data);
                     render(current)
                     break;
+                }
+                if(selected.data.items && !selected.data.collapsed) {
+                    selected.data.collapsed = true;
+                    render(current)
+                    break
                 }
             case 75://k
 			case 38: // upkey
@@ -369,6 +370,12 @@ function keys(key) {
             case 83:
                 nextStatus(selected.data);
                 render(current)
+                break;
+            case 90:
+                selected.data.collapsed =!selected.data.collapsed;
+                render(current)
+                break;
+                
 		}
    }
 	return false;
@@ -380,6 +387,7 @@ window.onload = function(){
   setSelected(0,0)
 }
 </script>
+
 <style>
 div {margin-left: 1em}
 span[contentEditable="true"] {background: #CCC}
@@ -387,16 +395,21 @@ span[contentEditable="true"] {background: #CCC}
 .attag { color: green }
 .hashtag { color: blue }
 a.collapsed-true {color:orange}
-a.collapsed-true, a.collapsed-false {margin-left: -1em; width: 1em}
+a.collapsed-true, a.collapsed-false {margin-left: -1em; width: 1em; display:inline-block}
+.wrap {margin-left:100px; margin-right:100px}
+div.filter {text-align: right}
+div#breadcrumb {float:left}
 </style>
 
 </head>
 <body>
+<div class=wrap>
     <header>Neal's work</header>
-    <input name=filter></input>
     <hr/>
     <div id=breadcrumb></div>
+    <div class=filter><input name=filter></input></div>
     <hr/>
     <div id=main></div>
+</div>
 </body>
 

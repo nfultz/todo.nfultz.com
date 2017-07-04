@@ -149,6 +149,16 @@ var prevSelected = function(){
     setSelected(0, -1)
 }
 
+var nextStatus = function(data){
+    statuses = "☐☑+"
+
+    i = (statuses.indexOf(data.status || '') + 1 + statuses.length) % statuses.length
+    data.status = statuses[i]
+
+
+
+
+}
 var setSelected2 = function(newNode) {
     var old = document.getElementById("selected")
     if(old) {
@@ -223,7 +233,8 @@ var renderTree = function(node, data, filtertxt) {
 
     //collapseToggle
     var collapseNode = document.createElement('a');
-    collapseNode.textContent = data.collapsed ? "+" : "-"
+    collapseNode.textContent = data.status || '-'
+    collapseNode.setAttribute("class", "collapsed-" + (data.collapsed == true) )
     collapseNode.onclick = function() {
             setSelected2(popNode)
             data.collapsed = !data.collapsed;
@@ -353,6 +364,11 @@ function keys(key) {
                 render(current)
                 document.getElementById('selected').click()
                 break
+            case 83:
+                console.log(selected.data)
+                nextStatus(selected.data);
+                console.log({"modified":selected.data})
+                render(current)
 		}
    }
 	return false;
@@ -370,6 +386,8 @@ span[contentEditable="true"] {background: #CCC}
 #selected.leaf {border: 1px dotted}
 .attag { color: green }
 .hashtag { color: blue }
+a.collapsed-true {color:orange}
+a.collapsed-true, a.collapsed-false {margin-left: -1em; width: 1em}
 </style>
 
 </head>

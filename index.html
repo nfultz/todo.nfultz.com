@@ -13,7 +13,8 @@ var doubleLink = function(data){
 }
 
 var eraseChildren = function(node){
-    while(node.firstChild) node.removeChild(node.firstChild)
+    node.innerHTML=''
+    //while(node.firstChild) node.removeChild(node.firstChild)
 }
 
 
@@ -31,6 +32,10 @@ var deleteItem = function (data) {
   var a = data.parent.items
   var i = a.indexOf(data)
   data.parent.items = a.slice(0, i).concat(data.items || []).concat(a.slice(i+1))
+  if(data.items)
+  for(var item of data.items){
+      item.parent = data.parent
+  }
 }
 
 var indent = function(data){
@@ -170,9 +175,11 @@ var setSelected2 = function(newNode) {
 }
 
 var renderLeaf = function(node, txt){
-    var chunks = txt.match(/[#@]\w+|[^#@]*/g)
-    if(chunks.length == 1 && chunks[0][0] != '#' && chunks[0][0] != '@')
+    var chunks = txt.match(/[#@]\w+|[^#@]*/g).filter(function(x){return x.length > 0})
+    if(chunks.length == 1 && chunks[0][0] != '#' && chunks[0][0] != '@'){
         node.innerHTML = txt
+        return
+    }
 
     for(chunk of chunks){
         var txtNode = document.createTextNode(chunk)
@@ -214,7 +221,10 @@ var renderTree = function(node, data, filtertxt) {
         popNode.setAttribute("id", "selected")
     popNode.data = data
 
-    popNode.ondblclick = function(){render(data)}
+    popNode.ondblclick = function(){
+        data.collapsed = false
+        render(data)
+    }
     popNode.onclick = function(){
         if(!data.selected) {
             setSelected2(popNode)
@@ -228,17 +238,15 @@ var renderTree = function(node, data, filtertxt) {
         var txt = popNode.innerText
         if(!txt) {
             deleteItem(data)
-            render(current)
         } else{
-            console.log(txt)
             txt = txt.split('\n')
-            console.log(txt)
             data['_'] = txt.shift()
             var i = 1;
             for(el of txt){
               if(el) insertnext(data, el, i++)
             }
         }
+        render(current)
     }
     if(toDraw) node.appendChild(popNode);
 

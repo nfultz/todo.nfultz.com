@@ -312,7 +312,7 @@ function keys(key) {
                 selected.ondblclick()
                 break;
             case 27: //escape
-                if(selected.getAttribute('contentEditable') !='true') {
+                if(!selected || selected.getAttribute('contentEditable') !='true') {
                     filter.value = ''
                 }
                 document.activeElement.blur()

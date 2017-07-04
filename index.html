@@ -161,6 +161,8 @@ var setSelected2 = function(newNode) {
 
 var renderLeaf = function(node, txt){
     var chunks = txt.match(/[#@]\w+|[^#@]*/g)
+    if(chunks.length == 1 && chunks[0][0] != '#' && chunks[0][0] != '@')
+        node.innerHTML = txt
 
     for(chunk of chunks){
         var txtNode = document.createTextNode(chunk)
@@ -204,9 +206,12 @@ var renderTree = function(node, data, filtertxt) {
 
     popNode.ondblclick = function(){render(data)}
     popNode.onclick = function(){
-        setSelected2(popNode)
-        popNode.setAttribute('contentEditable', 'true')
-        popNode.focus()
+        if(!data.selected) {
+            setSelected2(popNode)
+        } else {
+            popNode.setAttribute('contentEditable', 'true')
+            popNode.focus()
+        }
     }
     popNode.onblur = function(){
         popNode.setAttribute('contentEditable', 'false')

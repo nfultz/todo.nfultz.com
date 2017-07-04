@@ -127,6 +127,53 @@ var renderBreadcrumb = function(node, data){
 }
 
 
+function keys(key) {
+    console.log(key)
+	if (!key) {
+        console.log(key)
+		key = event;
+		key.which = key.keyCode;
+	}
+	if (key.which == 84) {
+		toggle();
+		return;
+	}
+	if (true) {
+		switch (key.which) {
+			case 10: // return
+			case 13: // enter
+			case 32: // spacebar
+			case 34: // page down
+			case 39: // rightkey
+			case 40: // downkey
+                nextSelected()
+				break;
+			case 33: // page up
+			case 37: // leftkey
+			case 38: // upkey
+                prevSelected()
+			   break;
+			case 36: // home
+				goTo(0);
+				break;
+			case 35: // end
+				goTo(smax-1);
+				break;
+			case 67: // c
+				showHide('k');
+				break;
+			case 78: // n
+				createNotesWindow();
+				break;
+		}
+   }
+	return false;
+}
+
+window.onload = function(){
+  document.onkeyup = keys
+  render(outline)
+}
 </script>
 <style>
 div {margin-left: 1em}
@@ -142,6 +189,5 @@ a[contentEditable="true"] {background: #CCC}
     <div id=breadcrumb></div>
     <hr/>
     <div id=main></div>
-    <script>render(outline)</script>
 </body>
 

@@ -193,6 +193,10 @@ function keys(key) {
 
 	if (true) {
 		switch (key.which) {
+			case 8: // backspace
+                if(current.parent)
+                    render(current.parent);
+                break;
 			case 10: // return
 			case 13: // enter
                 selected.ondblclick()
@@ -203,35 +207,33 @@ function keys(key) {
 			case 32: // spacebar
                 selected.onclick()
                 break;
-			case 34: // page down
 			case 39: // rightkey
-            case 76:
+            case 76: //l
                 if(selected.data.collapsed) {
                     selected.data.collapsed = false;
                     render(current)
                     break
                 }
-            case 74:
+            case 74: //j
 			case 40: // downkey
                 nextSelected()
 				break;
-			case 33: // page up
 			case 37: // leftkey
-            case 72:
+            case 72: // h
                 if(selected.data.items && !selected.data.collapsed) {
                     selected.data.collapsed = true;
                     render(current)
                     break
                 }
-            case 75:
+            case 75://k
 			case 38: // upkey
                prevSelected()
 			   break;
-            case 73:
+            case 73: //i
                     indent(selected.data);
                     render(current)
                     break;
-            case 79:
+            case 79: //o
                     dedent(selected.data);
                     render(current)
                     break;

@@ -236,7 +236,7 @@ var renderTree = function(node, data, filtertxt) {
             data['_'] = txt.shift()
             var i = 1;
             for(el of txt){
-              insertnext(data, el, i++)
+              if(el) insertnext(data, el, i++)
             }
         }
     }

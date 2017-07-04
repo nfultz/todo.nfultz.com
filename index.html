@@ -108,22 +108,22 @@ var swapdown = function(data){
 
 }
 
-insertup = function(data) {
+insertup = function(data, txt) {
 
   var a = data.parent.items
   var i = a.indexOf(data)
 
   data.selected = false
 
-  toAdd = {"_":"", "selected":true, "parent":data.parent}
+  toAdd = {"_":txt, "selected":true, "parent":data.parent}
   a.splice(i,0,toAdd)
 
 }
 
-insertdown = function(data) {
+insertdown = function(data, txt) {
 
   data.selected = false
-  toAdd = {"_":"", "selected":true, "parent":data}
+  toAdd = {"_":txt, "selected":true, "parent":data}
 
   if(!data.items) data.items = []
   data.items.unshift(toAdd)
@@ -268,15 +268,16 @@ var renderBreadcrumb = function(node, data){
 
 
 function keys(key) {
+    var filter = document.getElementsByName('filter')[0]
+    var selected = document.getElementById('selected')
 
     if(document.activeElement.name == 'filter' && key.which != 27){
         render(current)
-        if(document.getElementById('selected') == null && document.getElementsByClassName("leaf").length > 0) setSelected(0,0)
+        if(select == null && document.getElementsByClassName("leaf").length > 0) setSelected(0,0)
         return;
     }
     console.log(key)
 
-    var selected = document.getElementById('selected')
     if(selected && selected.getAttribute('contentEditable') == 'true' && key.which != 27) return false;
 
 	if (true) {
@@ -290,8 +291,8 @@ function keys(key) {
                 selected.ondblclick()
                 break;
             case 27: //escape
-                if(document.activeElement.getAttribute('contentEditable') !='true') {
-                    document.getElementsByName('filter')[0].value = ''
+                if(selected.getAttribute('contentEditable') !='true') {
+                    filter.value = ''
                 }
                 document.activeElement.blur()
                 render(current)
@@ -342,16 +343,16 @@ function keys(key) {
                prevSelected()
 			   break;
             case 191: //slash
-                document.getElementsByName('filter')[0].focus()
+                filter.focus()
                 break;
             case 79: // o new item above / below
                 if(key.shiftKey) {
-                    insertup(selected.data);
+                    insertup(selected.data, filter.value);
                     render(current)
                     document.getElementById('selected').click()
                     break;
                 }
-                insertdown(selected.data);
+                insertdown(selected.data, filter.value);
                 render(current)
                 document.getElementById('selected').click()
                 break

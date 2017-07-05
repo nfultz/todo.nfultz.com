@@ -28,10 +28,16 @@ var render = function(data){
     renderBreadcrumb(document.getElementById("breadcrumb"), data)
 }
 
-var deleteItem = function (data) {
-  if(!data.parent) return;
+var deleteItem = function (data, hard) {
+  if(!data.parent || data == current) return;
   var a = data.parent.items
   var i = a.indexOf(data)
+  if(hard) {
+    a.splice(i,1)
+    return;
+  }
+
+
   data.parent.items = a.slice(0, i).concat(data.items || []).concat(a.slice(i+1))
   if(data.items)
   for(var item of data.items){
@@ -240,7 +246,7 @@ var renderTree = function(node, data, filtertxt, editable) {
         popNode.setAttribute('contentEditable', 'false')
         var txt = popNode.innerText
         if(!txt) {
-            deleteItem(data)
+            deleteItem(data, false)
         } else{
             txt = txt.split('\n')
             data['_'] = txt.shift()
@@ -302,11 +308,12 @@ var renderBreadcrumb = function(node, data){
 
 function keys(key) {
     var filter = document.getElementsByName('filter')[0]
+    var editable = document.getElementsByName('editable')[0].checked
     var selected = document.getElementById('selected')
 
     if(document.activeElement.name == 'filter' && key.which != 27){
         render(current)
-        if(select == null && document.getElementsByClassName("leaf").length > 0) setSelected(0,0)
+        if(selected == null && document.getElementsByClassName("leaf").length > 0) setSelected(0,0)
         return;
     }
 
@@ -334,7 +341,7 @@ function keys(key) {
                 break;
 			case 39: // rightkey
             case 76: //l
-                if(key.shiftKey){
+                if(key.shiftKey && editable){
                     indent(selected.data);
                     render(current)
                     break;
@@ -346,7 +353,7 @@ function keys(key) {
                 }
             case 74: //j
 			case 40: // downkey
-                if(key.shiftKey) {
+                if(key.shiftKey && editable) {
                     swapdown(selected.data);
                     render(current)
                     break;
@@ -355,7 +362,7 @@ function keys(key) {
 				break;
 			case 37: // leftkey
             case 72: // h
-                if(key.shiftKey) {
+                if(key.shiftKey && editable) {
                     dedent(selected.data);
                     render(current)
                     break;
@@ -367,7 +374,7 @@ function keys(key) {
                 }
             case 75://k
 			case 38: // upkey
-                if(key.shiftKey) {
+                if(key.shiftKey && editable) {
                     swapup(selected.data);
                     render(current)
                     break;
@@ -378,6 +385,7 @@ function keys(key) {
                 filter.focus()
                 break;
             case 79: // o new item above / below
+                if(!editable) break;
                 if(key.shiftKey) {
                     insertup(selected.data, filter.value);
                     render(current)
@@ -389,6 +397,7 @@ function keys(key) {
                 document.getElementById('selected').click()
                 break
             case 83: // s
+                if(!editable) break;
                 nextStatus(selected.data);
                 render(current)
                 break;
@@ -400,7 +409,8 @@ function keys(key) {
                 render(current)
                 break;
             case 68: // d delete
-                deleteItem(selected.data)
+                if(!editable) break;
+                deleteItem(selected.data, key.shiftKey)
                 render(current)
                 break;
                 

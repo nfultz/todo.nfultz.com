@@ -97,14 +97,6 @@ var swap = function(data, delta) {
   a[j] = data
 }
 
-var swapup = function(data){
-    swap(data, -1)
-}
-
-var swapdown = function(data){
-    swap(data, 1)
-}
-
 
 insertnext = function(data, txt, j) {
   var a = data.parent.items
@@ -240,7 +232,7 @@ var renderTree = function(node, data, filtertxt, editable) {
 
     //collapseToggle
     var collapseNode = document.createElement('a');
-    collapseNode.textContent = data.status || '-'
+    collapseNode.textContent = data.status || data.collapsed ? '+' : '-'
     collapseNode.setAttribute("class", "collapsed-" + (data.collapsed == true) )
     collapseNode.onclick = function() {
             setSelected2(popNode)
@@ -339,7 +331,7 @@ function keys(key) {
             case 74: //j
 			case 40: // downkey
                 if(key.shiftKey && editable) {
-                    swapdown(selected.data);
+                    swap(data, 1)
                     render(current)
                     break;
                 }
@@ -360,7 +352,7 @@ function keys(key) {
             case 75://k
 			case 38: // upkey
                 if(key.shiftKey && editable) {
-                    swapup(selected.data);
+                    swap(data, -1)
                     render(current)
                     break;
                 }

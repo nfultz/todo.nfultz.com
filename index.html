@@ -84,55 +84,35 @@ var dedent = function(data) {
   data.parent = data.parent.parent
   doubleLink(data)
 
+}
 
+var swap = function(data, delta) {
+  var a = data.parent.items
+  var i = a.indexOf(data)
+  var j = i + delta;
 
+  if(j < 0 || j >= a.length) return;
+
+  a[i] = a[j]
+  a[j] = data
 }
 
 var swapup = function(data){
-
-  var a = data.parent.items
-  var i = a.indexOf(data)
-
-  if(i == 0) return;
-
-  a[i] = a[i-1]
-  a[i-1] = data
-
+    swap(data, -1)
 }
 
 var swapdown = function(data){
-
-  var a = data.parent.items
-  var i = a.indexOf(data)
-
-  if(i == a.length -1) return;
-    
-  a[i] = a[i+1]
-  a[i+1] = data
-
+    swap(data, 1)
 }
 
-insertprev = function(data, txt) {
-
-  var a = data.parent.items
-  var i = a.indexOf(data)
-
-  data.selected = false
-
-  toAdd = {"_":txt, "selected":true, "parent":data.parent}
-  a.splice(i,0,toAdd)
-
-}
 
 insertnext = function(data, txt, j) {
-
   var a = data.parent.items
   var i = a.indexOf(data)
   data.selected = false
 
   toAdd = {"_":txt, "selected":true, "parent":data.parent}
   a.splice(i+j,0,toAdd)
-
 }
 
 insertchild = function(data, txt) {
@@ -145,6 +125,13 @@ insertchild = function(data, txt) {
   data.items.push(toAdd)
 }
  
+var nextStatus = function(data){
+    statuses = "+-✔"
+
+    i = statuses.indexOf(data.status || '') + 1 + statuses.length
+    data.status = statuses[i % statuses.length]
+}
+
 
 var setSelected = function(idx, delta) {
     var leaves = document.getElementsByClassName("leaf")
@@ -163,13 +150,6 @@ var nextSelected = function(){
 
 var prevSelected = function(){
     setSelected(0, -1)
-}
-
-var nextStatus = function(data){
-    statuses = "+-✔"
-
-    i = statuses.indexOf(data.status || '') + 1 + statuses.length
-    data.status = statuses[i % statuses.length]
 }
 
 var setSelected2 = function(newNode) {
@@ -391,13 +371,7 @@ function keys(key) {
                 break;
             case 79: // o new item above / below
                 if(!editable) break;
-                if(key.shiftKey) {
-                    insertprev(selected.data, filter.value);
-                    render(current)
-                    document.getElementById('selected').click()
-                    break;
-                }
-                insertnext(selected.data, filter.value,1);
+                insertnext(selected.data, filter.value,key.shiftKey ? 0 : 1);
                 render(current)
                 document.getElementById('selected').click()
                 break

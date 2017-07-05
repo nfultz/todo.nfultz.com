@@ -112,7 +112,7 @@ var swapdown = function(data){
 
 }
 
-insertup = function(data, txt) {
+insertprev = function(data, txt) {
 
   var a = data.parent.items
   var i = a.indexOf(data)
@@ -135,14 +135,14 @@ insertnext = function(data, txt, j) {
 
 }
 
-insertdown = function(data, txt) {
+insertchild = function(data, txt) {
 
   data.selected = false
   data.collapsed = false
   toAdd = {"_":txt, "selected":true, "parent":data}
 
   if(!data.items) data.items = []
-  data.items.unshift(toAdd)
+  data.items.push(toAdd)
 }
  
 
@@ -392,12 +392,18 @@ function keys(key) {
             case 79: // o new item above / below
                 if(!editable) break;
                 if(key.shiftKey) {
-                    insertup(selected.data, filter.value);
+                    insertprev(selected.data, filter.value);
                     render(current)
                     document.getElementById('selected').click()
                     break;
                 }
-                insertdown(selected.data, filter.value);
+                insertnext(selected.data, filter.value,1);
+                render(current)
+                document.getElementById('selected').click()
+                break
+            case 65: // a appends a child
+                if(!editable) break;
+                insertchild(selected.data, filter.value);
                 render(current)
                 document.getElementById('selected').click()
                 break

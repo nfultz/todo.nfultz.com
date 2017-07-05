@@ -139,13 +139,6 @@ var setSelected = function(idx, delta) {
     setSelected2(leaves[selected])
 }
 
-var nextSelected = function(){
-    setSelected(0, 1)
-}
-
-var prevSelected = function(){
-    setSelected(0, -1)
-}
 
 var setSelected2 = function(newNode) {
     var old = document.getElementById("selected")
@@ -326,7 +319,7 @@ function keys(key) {
                     render(current)
                     break;
                 }
-                nextSelected()
+                setSelected(0, 1)
 				break;
 			case 37: // leftkey
             case 72: // h
@@ -347,7 +340,7 @@ function keys(key) {
                     render(current)
                     break;
                 }
-               prevSelected()
+               setSelected(0, -1)
 			   break;
             case 191: //slash
                 filter.focus()

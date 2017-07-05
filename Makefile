@@ -4,3 +4,6 @@ put : index.html outline.json ## Update todo.nfultz.com
 	git diff --exit-code
 	s3cmd put index.html outline.json   s3://todo.nfultz.com
 
+get :
+	wget -O - http://todo.nfultz.com/outline.json | python -m json.tool > outline.json
+

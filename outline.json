@@ -1,1 +1,80 @@
-{"_":"todo","items":[{"_":"About Me","items":[]},{"_":"Projects"},{"_":"Books","items":[{"_":"Effective Altruism #EA"},{"_":"Fiction"},{"_":"The Executioner"},{"_":"Shadowrun"}]},{"_":"Keyboard Shortcuts","collapsed":true,"items":[{"_":"hjkl - navigate"},{"_":"HJKL - move items"},{"_":"oO - insert"},{"_":"<Enter> drilldown","items":[{"_":"<Backspace> undrilldown"}]},{"_":"<Space> - edit"},{"_":"d - delete"},{"_":"w - write"},{"_":"z - collapse","status":"-"},{"_":"s - toggle status icon (flakey)","items":[]}]}]}
+{
+    "_": "todo",
+    "items": [
+        {
+            "_": "About Me",
+            "items": [
+                {
+                    "_": "I'm a data scientist in Los Angeles."
+                }
+            ]
+        },
+        {
+            "_": "Projects"
+        },
+        {
+            "_": "Books",
+            "items": [
+                {
+                    "_": "Effective Altruism #EA",
+                    "items": [
+                        {
+                            "_": "TBR"
+                        },
+                        {
+                            "_": "Done"
+                        }
+                    ]
+                },
+                {
+                    "_": "Fiction"
+                },
+                {
+                    "_": "The Executioner"
+                },
+                {
+                    "_": "Shadowrun"
+                }
+            ]
+        },
+        {
+            "_": "Keyboard Shortcuts",
+            "collapsed": true,
+            "items": [
+                {
+                    "_": "hjkl - navigate"
+                },
+                {
+                    "_": "HJKL - move items"
+                },
+                {
+                    "_": "oO - insert"
+                },
+                {
+                    "_": "<Enter> drilldown",
+                    "items": [
+                        {
+                            "_": "<Backspace> undrilldown"
+                        }
+                    ]
+                },
+                {
+                    "_": "<Space> - edit"
+                },
+                {
+                    "_": "d - delete"
+                },
+                {
+                    "_": "w - write"
+                },
+                {
+                    "_": "z - collapse",
+                    "status": "-"
+                },
+                {
+                    "_": "s - toggle status icon (flakey)"
+                }
+            ]
+        }
+    ]
+}

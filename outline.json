@@ -16,24 +16,32 @@
             "_": "Books",
             "items": [
                 {
-                    "_": "Effective Altruism #EA",
+                    "_": "Nonfiction",
                     "items": [
                         {
-                            "_": "TBR"
-                        },
-                        {
-                            "_": "Done"
+                            "_": "Effective Altruism #EA",
+                            "collapsed": true,
+                            "items": [
+                                {
+                                    "_": "TBR"
+                                },
+                                {
+                                    "_": "Done"
+                                }
+                            ]
                         }
                     ]
                 },
                 {
-                    "_": "Fiction"
-                },
-                {
-                    "_": "The Executioner"
-                },
-                {
-                    "_": "Shadowrun"
+                    "_": "Fiction",
+                    "items": [
+                        {
+                            "_": "The Executioner"
+                        },
+                        {
+                            "_": "Shadowrun"
+                        }
+                    ]
                 }
             ]
         },

@@ -128,8 +128,9 @@ insertnext = function(data, txt, j) {
 
   var a = data.parent.items
   var i = a.indexOf(data)
+  data.selected = false
 
-  toAdd = {"_":txt, "parent":data.parent}
+  toAdd = {"_":txt, "selected":true, "parent":data.parent}
   a.splice(i+j,0,toAdd)
 
 }
@@ -137,6 +138,7 @@ insertnext = function(data, txt, j) {
 insertdown = function(data, txt) {
 
   data.selected = false
+  data.collapsed = false
   toAdd = {"_":txt, "selected":true, "parent":data}
 
   if(!data.items) data.items = []
@@ -248,12 +250,7 @@ var renderTree = function(node, data, filtertxt, editable) {
         if(!txt) {
             deleteItem(data, false)
         } else{
-            txt = txt.split('\n')
-            data['_'] = txt.shift()
-            var i = 1;
-            for(el of txt){
-              if(el) insertnext(data, el, i++)
-            }
+            data['_'] = txt
         }
         render(current)
     }
@@ -308,8 +305,9 @@ var renderBreadcrumb = function(node, data){
 
 function keys(key) {
     var filter = document.getElementsByName('filter')[0]
-    var editable = document.getElementsByName('editable')[0].checked
     var selected = document.getElementById('selected')
+    var editable = document.getElementsByName('editable')[0].checked
+    var editing = selected && selected.getAttribute('contentEditable') == 'true'
 
     if(document.activeElement.name == 'filter' && key.which != 27){
         render(current)
@@ -317,7 +315,7 @@ function keys(key) {
         return;
     }
 
-    if(selected && selected.getAttribute('contentEditable') == 'true' && key.which != 27) return false;
+    if(editing && [10,13,27].indexOf(key.which) < 0) return false;
 
 	if (true) {
 		switch (key.which) {
@@ -327,10 +325,17 @@ function keys(key) {
                 break;
 			case 10: // return
 			case 13: // enter
+                if(editing) {
+                  selected.blur()
+                  insertnext(selected.data, filter.value,1);
+                  render(current)
+                  document.getElementById('selected').click()
+                  break;
+                }
                 selected.ondblclick()
                 break;
             case 27: //escape
-                if(!selected || selected.getAttribute('contentEditable') !='true') {
+                if(!editing) {
                     filter.value = ''
                 }
                 document.activeElement.blur()

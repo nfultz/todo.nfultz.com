@@ -24,8 +24,11 @@ var render = function(data){
     current = data;
     var filtertxt = document.getElementsByName("filter")[0].value
     var editable = document.getElementsByName('editable')[0].checked
-    renderTree(document.getElementById("main"), data, filtertxt, editable)
+    var main = document.getElementById("main")
+    renderTree(main, data, filtertxt, editable)
     renderBreadcrumb(document.getElementById("breadcrumb"), data)
+    addHashTagHandlers(main, "hashtag")
+    addHashTagHandlers(main, "attag")
 }
 
 var deleteItem = function (data, hard) {
@@ -155,38 +158,23 @@ var setSelected2 = function(newNode) {
     if(newNode.data) newNode.data.selected = true
 }
 
-var renderLeaf = function(node, txt){
-    var chunks = txt.match(/[#@]\w+|[^#@]*/g).filter(function(x){return x.length > 0})
-    if(chunks.length == 1 && chunks[0][0] != '#' && chunks[0][0] != '@'){
-        node.innerHTML = txt
-        return
-    }
-
-    for(chunk of chunks){
-        var txtNode = document.createTextNode(chunk)
-        var childNode = document.createElement('a')
-        switch(chunk[0]) {
-                case '#':
-                case '@':
-                childNode.setAttribute('class', {'#':'hashtag', '@':'attag'}[chunk[0]])
-                childNode.setAttribute('href', '#')
-                childNode.appendChild(txtNode)
-                childNode.onclick = (function(i){
+var addHashTagHandlers = function(node, className) {
+  for(var tag of node.getElementsByClassName(className)){
+    tag.onclick = (function(i){
                     return function(e){
                         e.stopPropagation()
                         document.getElementsByName("filter")[0].value = i
                         render(current)
                     }
-                })(chunk)
-                break;
-                default:
-                  childNode = txtNode
-        }
-        node.append(childNode)
+                })(tag.textContent)
+  }
 
+}
 
-    }
-
+var renderLeaf = function(node, txt){
+   node.innerHTML = txt
+        .replace(/(#\w+)/g, '<a href=# class=hashtag>$1</a>')
+        .replace(/(@\w+)/g, '<a href=# class=attag>$1</a>')
 }
 
 var renderTree = function(node, data, filtertxt, editable) {
@@ -210,6 +198,9 @@ var renderTree = function(node, data, filtertxt, editable) {
         if(!data.selected) {
             setSelected2(popNode)
         } else {
+            var oldText = popNode.innerHTML
+            popNode.innerHTML = ""
+            popNode.innerText = data["_"]
             popNode.setAttribute('contentEditable', 'true')
             popNode.focus()
         }

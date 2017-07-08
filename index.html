@@ -18,10 +18,16 @@ var eraseChildren = function(node){
 }
 
 
-current = 0
+current = {}
+last_collapsed = false;
 
 var render = function(data){
-    current = data;
+    if(current != data) {
+        current.collapsed = last_collapsed;
+        last_collapsed = data.collapsed
+        data.collapsed = false
+        current = data;
+    }
     var filtertxt = document.getElementsByName("filter")[0].value
     var editable = document.getElementsByName('editable')[0].checked
     var main = document.getElementById("main")
@@ -184,7 +190,6 @@ var renderTree = function(node, data, filtertxt, editable) {
     popNode.data = data
 
     popNode.ondblclick = function(){
-        data.collapsed = false
         render(data)
     }
     popNode.onclick = !editable ? popNode.ondblclick : function(){

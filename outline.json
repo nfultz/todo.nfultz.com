@@ -10,7 +10,133 @@
             ]
         },
         {
-            "_": "Projects"
+            "_": "Projects",
+            "items": [
+                {
+                    "_": "Python\n\n"
+                },
+                {
+                    "_": "R\n\n"
+                },
+                {
+                    "_": "Other"
+                }
+            ]
+        },
+        {
+            "_": "Notes",
+            "items": [
+                {
+                    "_": "Slint",
+                    "collapsed": true,
+                    "items": [
+                        {
+                            "_": "Members\n\n",
+                            "items": [
+                                {
+                                    "_": "Britt Walford\n\n"
+                                },
+                                {
+                                    "_": "Brian McMahan\n\n"
+                                },
+                                {
+                                    "_": "Dave Pajo\n\n"
+                                },
+                                {
+                                    "_": "Todd Brashear"
+                                }
+                            ]
+                        },
+                        {
+                            "_": "Albums",
+                            "items": [
+                                {
+                                    "_": "Tweez\n\n"
+                                },
+                                {
+                                    "_": "Spiderland"
+                                }
+                            ]
+                        },
+                        {
+                            "_": "Ref",
+                            "items": [
+                                {
+                                    "_": "<a href=http://history.louisvillehardcore.com/index.php?title=Squirrel_Bait>Squirrel Bait</a> was another ancestor band\n\n",
+                                    "collapsed": true,
+                                    "items": [
+                                        {
+                                            "_": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Oukbq4f_oqI\" frameborder=\"0\" allowfullscreen></iframe>"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "_": "<a href=http://history.louisvillehardcore.com/index.php?title=Maurice>Maurice</a> was Walford and Pajo's first band",
+                                    "collapsed": true,
+                                    "items": [
+                                        {
+                                            "_": "<iframe style=\"border: 0; width: 100%; height: 42px;\" src=\"https://bandcamp.com/EmbeddedPlayer/album=2931605041/size=small/bgcol=ffffff/linkcol=0687f5/transparent=true/\" seamless><a href=\"http://papam.bandcamp.com/album/the-first-shall-be-last\">The First Shall Be Last by Maurice</a></iframe>"
+                                        },
+                                        {
+                                            "_": "The other members went on to form <a href=http://history.louisvillehardcore.com/index.php?title=Kinghorse>Kinghorse</a>",
+                                            "items": [
+                                                {
+                                                    "_": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/nTd_IIVIsoo\" frameborder=\"0\" allowfullscreen></iframe>"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "_": "After it broke up, they formed <a href=http://history.louisvillehardcore.com/index.php?title=Solution_Unknown>Solution Unknown</a>",
+                                    "collapsed": true,
+                                    "items": [
+                                        {
+                                            "_": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/YJ4KEntQN2k\" frameborder=\"0\" allowfullscreen></iframe>"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "_": "Slint's first show was at Thomas Jefferson Unitarian Church at mass"
+                                },
+                                {
+                                    "_": "Steve Albini's oft cited revew:\u00a0",
+                                    "collapsed": true,
+                                    "items": [
+                                        {
+                                            "_": "<img src=https://pbs.twimg.com/media/BaOnw4MIIAE8B5R.jpg:large>"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "_": "<a href=http://www.newyorker.com/magazine/2005/04/11/slow-fade>Slow Fade in New Yorker</a> written around their reunion shows"
+                                },
+                                {
+                                    "_": "<a href=https://www.theguardian.com/music/2014/may/01/spiderland-slint-album-reinvented-rock>Guardian retrospective</a> from remaster release"
+                                },
+                                {
+                                    "_": "Also to listen too: Bedhead and Bitch Magnet"
+                                },
+                                {
+                                    "_": "Good Morning Captain - maybe riffing on Rime of the Ancient Mariner"
+                                },
+                                {
+                                    "_": "\"Good Morning Captian\" appeared on the Kids soundtrack album, but not in the film itself."
+                                },
+                                {
+                                    "_": "\"History adds weight to things\" - Brashear"
+                                },
+                                {
+                                    "_": "Pajo attempted suicide in 2015 :("
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "_": "<a href=http://www.ezipangu.org/english/contents/news/naname/parasite/1.html>Parasite Singles</a> ?"
+                }
+            ]
         },
         {
             "_": "Books",
@@ -40,6 +166,15 @@
                         },
                         {
                             "_": "Shadowrun"
+                        },
+                        {
+                            "_": "Literary Fiction\n\n"
+                        },
+                        {
+                            "_": "SciFi, Fantasy, Horror\n\n"
+                        },
+                        {
+                            "_": "Crime, Legal, Mystery\u00a0"
                         }
                     ]
                 }
